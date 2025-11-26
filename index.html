@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chinh Phục Số Nguyên - Toán 6</title>
+    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <style>
+        /* GIỮ NGUYÊN CSS CŨ */
+        :root {
+            --primary: #FF6B6B; 
+            --secondary: #4ECDC4; 
+            --accent: #FFE66D; 
+            --dark: #292f36;
+            --light: #f7fff7;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--secondary);
+            background-image: linear-gradient(135deg, #4ECDC4 0%, #556270 100%);
+            margin: 0;
+            color: var(--dark);
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: white;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 5px solid var(--primary);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            position: relative;
+            border-radius: 0 0 30px 30px;
+        }
+
+        h1 {
+            font-family: 'Patrick Hand', cursive;
+            font-size: 3rem;
+            margin: 0;
+            color: var(--primary);
+            text-shadow: 2px 2px var(--accent);
+        }
+
+        .score-board {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            background: var(--accent);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            border: 2px solid var(--dark);
+            box-shadow: 3px 3px 0px var(--dark);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 0 15px;
+        }
+
+        .section-title {
+            font-family: 'Patrick Hand', cursive;
+            color: white;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px #000;
+            margin-bottom: 20px;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+            border: 2px solid transparent;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+        }
+
+        .card h3 {
+            color: var(--secondary);
+            border-bottom: 2px dashed #ddd;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+
+        .concept-box {
+            background: #f0f8ff;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 5px solid var(--primary);
+        }
+
+        .fun-fact {
+            background: #fff9c4;
+            border: 2px dashed var(--primary);
+        }
+        .fun-fact img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-top: 15px;
+            border: 1px solid #ddd;
+        }
+
+        .game-area {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .question-box {
+            font-size: 1.5rem;
+            margin: 20px 0;
+            font-weight: bold;
+            min-height: 60px; /* Đảm bảo khung không bị nhảy */
+        }
+        
+        .quiz-img {
+            max-width: 300px;
+            max-height: 200px;
+            border-radius: 10px;
+            margin: 10px auto;
+            display: none;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        input[type="number"] {
+            font-size: 1.5rem;
+            padding: 10px;
+            width: 100px;
+            text-align: center;
+            border: 3px solid #ddd;
+            border-radius: 10px;
+            outline: none;
+        }
+
+        .btn-check {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 15px;
+            font-family: 'Patrick Hand', cursive;
+            box-shadow: 0 4px 0 #c0392b;
+            transition: all 0.1s;
+        }
+
+        .btn-check:active {
+            transform: translateY(4px);
+            box-shadow: 0 0 0 #c0392b;
+        }
+
+        .feedback {
+            margin-top: 15px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            min-height: 30px;
+        }
+
+        .shake { animation: shake 0.5s; }
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+
+        footer {
+            text-align: center;
+            color: white;
+            padding: 20px;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🚀 Chinh Phục Số Nguyên</h1>
+        <div class="score-board">
+            ⭐ Điểm: <span id="score">0</span> XP
+        </div>
+        <p>Ôn tập kiến thức Toán 6 một cách vui vẻ!</p>
+    </header>
+
+    <div class="container">
+        
+        <h2 class="section-title">📜 Bí Kíp Nhập Môn</h2>
+        <div class="card-grid">
+            <div class="card">
+                <h3>1. Cộng hai phe đối nghịch (Khác dấu)</h3>
+                <div class="concept-box">
+                    <p><strong>Chiến thuật:</strong> Tìm xem phe nào mạnh hơn (giá trị tuyệt đối lớn hơn)?</p>
+                    <ul>
+                        <li>Lấy số lớn trừ số bé.</li>
+                        <li>Kết quả mang dấu của "phe mạnh hơn".</li>
+                    </ul>
+                </div>
+                <p>Ví dụ: \( (+2) + (-6) \)</p>
+                <p>Phe âm (-6) mạnh hơn phe dương (+2). <br> -> Kết quả là âm: \( -(6-2) = -4 \).</p>
+            </div>
+
+            <div class="card">
+                <h3>2. Phép trừ "Biến hình"</h3>
+                <div class="concept-box">
+                    <p>Phép trừ thực ra là phép cộng!</p>
+                    <p style="font-size: 1.2em; text-align: center; color: var(--primary);">
+                        \( a - b = a + (-b) \)
+                    </p>
+                </div>
+                <p>Ví dụ: \( 2 - 5 \)</p>
+                <p>Biến hình: \( 2 + (-5) = -3 \)</p>
+            </div>
+
+            <div class="card">
+                <h3>3. Phá vỡ lồng giam (Dấu ngoặc)</h3>
+                <div class="concept-box">
+                    <p><strong>Quy tắc phá ngục:</strong> Hãy nhìn tên cai ngục đứng ngay trước cửa!</p>
+                    <ul>
+                        <li>Cai ngục <strong>Dấu Cộng (+)</strong>: Mở cửa thả ra, giữ nguyên mọi thứ.</li>
+                        <li>Cai ngục <strong>Dấu Trừ (-)</strong>: Phải <strong>đổi dấu</strong> tất cả tù nhân bên trong (Dương ➝ Âm, Âm ➝ Dương).</li>
+                    </ul>
+                </div>
+                <p>Ví dụ: \( -(a - b) = -a + b \)</p>
+            </div>
+        </div>
+
+        <h2 class="section-title">🌍 Thế Giới Quanh Ta</h2>
+        <div class="card-grid">
+            <div class="card fun-fact">
+                <h3>🐟 Chuyện chú Cá Chuồn</h3>
+                <p>Một chú cá đang ở độ sâu <strong>2m</strong> dưới biển (-2). Chú lấy đà bay vọt lên cao thêm <strong>3m</strong> (+3).</p>
+                <p>Hỏi chú đang ở đâu?</p>
+                <p><strong>Phép tính:</strong> \( (-2) + 3 = 1 \) (mét)</p>
+                <p><em>Kết luận: Chú cá đang bay cao hơn mặt nước 1m!</em></p>
+                <img src="https://tepbac.com/upload/images/2024/04/ca-chuon-1_1712200867.jpg" alt="Cá chuồn">
+            </div>
+
+            <div class="card fun-fact">
+                <h3>🏛️ Nhà bác học Archimedes</h3>
+                <p>Ông sinh năm <strong>287 TCN</strong> (-287) và mất năm <strong>212 TCN</strong> (-212).</p>
+                <p>Tuổi thọ của ông là bao nhiêu?</p>
+                <p><strong>Phép tính:</strong> \( (-212) - (-287) = -212 + 287 = 75 \)</p>
+                <p><em>Kết luận: Ông thọ 75 tuổi.</em></p>
+                <img src="https://images.immediate.co.uk/production/volatile/sites/7/2023/12/Illustration-of-archimedes-53d0769-e1701949287191.jpg" alt="Archimedes">
+            </div>
+        </div>
+
+        <h2 class="section-title">🎮 Đấu Trường Toán Học</h2>
+        <div class="game-area">
+            <p>Vượt qua tất cả các câu hỏi để trở thành "Trùm Số Nguyên"!</p>
+            
+            <div id="quiz-container">
+                <img id="quiz-img" class="quiz-img" src="" alt="Hình minh họa">
+
+                <div class="question-box" id="question-text">
+                    Đang khởi động trò chơi...
+                </div>
+                
+                <input type="number" id="user-answer" placeholder="?" autocomplete="off">
+                <br>
+                <button class="btn-check" onclick="checkAnswer()">Kiểm tra ngay</button>
+                
+                <div id="feedback-msg" class="feedback"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>Nội dung dựa trên bộ sách Chân trời sáng tạo | Thiết kế cho học sinh lớp 6</p>
+    </footer>
+
+    <script>
+        // Dữ liệu câu hỏi
+        const questions = [
+            { text: "Tính: \\( (-4) + (-7) \\)", answer: -11, note: "Cùng dấu âm thì cộng lại rồi đặt dấu (-) nhé!", img: "" },
+            { text: "Tính: \\( 4 + (-7) \\)", answer: -3, note: "Số âm (-7) mạnh hơn số dương (4) => Kết quả âm.", img: "" },
+            { text: "Tính: \\( 23 - (-12) \\)", answer: 35, note: "Trừ của trừ thành cộng: 23 + 12 = 35.", img: "" },
+            { text: "Tính: \\( (-5) + 12 \\)", answer: 7, note: "Số dương 12 lớn hơn số đối của -5.", img: "" },
+            { text: "Tính: \\( (-25) + 72 \\)", answer: 47, note: "Lấy 72 trừ 25 = 47.", img: "" },
+            
+            // Câu hỏi hình ảnh/thực tế
+            { 
+                text: "Nhiệt độ phòng lạnh là 2°C. Bác thợ giảm đi 5°C. Nhiệt độ mới là bao nhiêu?", 
+                answer: -3, 
+                note: "Phép tính: 2 - 5 = -3.", 
+                img: "https://images.unsplash.com/photo-1564313337446-48c0350d75f2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" 
+            },
+            { 
+                text: "Bác Lan cho nợ 80k, sau đó cho nợ thêm 40k. Tổng nợ là bao nhiêu (biểu diễn số âm)?", 
+                answer: -120, 
+                note: "-80 + (-40) = -120.", 
+                img: "" 
+            },
+            { 
+                text: "Tàu ngầm đang ở độ sâu -20m, nó lặn xuống thêm 15m nữa. Hỏi độ sâu mới?", 
+                answer: -35, 
+                note: "-20 + (-15) = -35.", 
+                img: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/160826-N-WI365-108_%2829323499386%29.jpg/640px-160826-N-WI365-108_%2829323499386%29.jpg" 
+            },
+            { 
+                text: "Thang máy đang ở tầng 3, đi LÊN 5 tầng. Nó dừng ở tầng mấy?", 
+                answer: 8, 
+                note: "3 + 5 = 8.", 
+                img: "" 
+            },
+            { 
+                text: "Vẫn chiếc thang máy đó ở tầng 3, giờ đi XUỐNG 5 tầng. Nó dừng ở tầng số mấy? (Tầng hầm là số âm)", 
+                answer: -2, 
+                note: "3 - 5 = -2.", 
+                img: "" 
+            },
+            { 
+                text: "Archimedes sinh năm -287, mất năm -212. Ông hưởng thọ bao nhiêu tuổi?", 
+                answer: 75, 
+                note: "(-212) - (-287) = 75.", 
+                img: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Archimedes_by_Fetti.jpg/300px-Archimedes_by_Fetti.jpg" 
+            }
+        ];
+
+        let currentQIndex = 0;
+        let score = 0;
+
+        function loadQuestion() {
+            console.log("Đang tải câu hỏi..."); // Kiểm tra log
+            const q = questions[currentQIndex];
+            
+            // Cập nhật text câu hỏi
+            const qTextElement = document.getElementById('question-text');
+            if (qTextElement) {
+                qTextElement.innerHTML = "Câu " + (currentQIndex + 1) + "/" + questions.length + ": " + q.text;
+            } else {
+                console.error("Không tìm thấy thẻ có id='question-text'");
+                return;
+            }
+            
+            // Reset input
+            document.getElementById('user-answer').value = '';
+            document.getElementById('feedback-msg').innerHTML = '';
+            
+            // Xử lý ảnh
+            const imgEl = document.getElementById('quiz-img');
+            if(q.img && q.img !== "") {
+                imgEl.src = q.img;
+                imgEl.style.display = "block";
+            } else {
+                imgEl.style.display = "none";
+            }
+
+            // Render lại công thức Toán (có kiểm tra lỗi)
+            if (window.MathJax) {
+                MathJax.typesetPromise().catch((err) => console.log('MathJax error:', err));
+            }
+        }
+
+        function checkAnswer() {
+            const userVal = parseInt(document.getElementById('user-answer').value);
+            const currentQ = questions[currentQIndex];
+            const feedback = document.getElementById('feedback-msg');
+            const gameArea = document.querySelector('.game-area');
+
+            if (isNaN(userVal)) {
+                feedback.innerHTML = "⚠️ Nhập số vào đi bạn ơi!";
+                feedback.style.color = "orange";
+                return;
+            }
+
+            if (userVal === currentQ.answer) {
+                score += 100;
+                document.getElementById('score').innerText = score;
+                feedback.innerHTML = "🎉 Chính xác! " + currentQ.note;
+                feedback.style.color = "green";
+                
+                // Đợi 2 giây rồi chuyển câu
+                setTimeout(() => {
+                    currentQIndex++;
+                    if (currentQIndex < questions.length) {
+                        loadQuestion();
+                    } else {
+                        // Màn hình kết thúc
+                        gameArea.innerHTML = `
+                            <h2 style="color: var(--primary)">🏆 HOÀN THÀNH XUẤT SẮC!</h2>
+                            <p>Bạn đã trả lời đúng tất cả câu hỏi.</p>
+                            <p style="font-size: 2rem;">Tổng điểm: <strong>${score} XP</strong></p>
+                            <button class="btn-check" onclick="location.reload()">Chơi lại từ đầu</button>
+                        `;
+                    }
+                }, 2000);
+            } else {
+                feedback.innerHTML = "💥 Sai rồi, thử tính lại xem!";
+                feedback.style.color = "red";
+                gameArea.classList.add('shake');
+                setTimeout(() => { gameArea.classList.remove('shake'); }, 500);
+            }
+        }
+
+        // --- QUAN TRỌNG: CHẠY HÀM NÀY NGAY LẬP TỨC ---
+        // Thay vì chờ window.onload, ta gọi trực tiếp ở đây
+        // vì script đặt cuối body nên các thẻ HTML đã tồn tại.
+        loadQuestion(); 
+
+    </script>
+</body>
+</html>
